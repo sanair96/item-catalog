@@ -396,12 +396,12 @@ def editRestaurant(restaurant_id):
 def deleteRestaurant(restaurant_id):
     if 'username' not in login_session:
         return redirect('/login')
+    deletedrest = \
+        session.query(Restaurant).filter_by(id=restaurant_id).one()
     if deletedrest.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized"\
                " to delete this restaurant. Please create your own restaurant"\
                " in order to delete.');}</script><body onload='myFunction()''>"
-    deletedrest = \
-        session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
         session.delete(deletedrest)
         session.commit()
@@ -529,7 +529,7 @@ def disconnect():
         if login_session['provider'] == 'google':
             gdisconnect()
             del login_session['gplus_id']
-            del login_session['credentials']
+            #del login_session['credentials']
             del login_session['access_token']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
