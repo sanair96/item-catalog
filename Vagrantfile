@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
   # boxes at https://vagrantcloud.com/search.
   config.vm.provision :shell, path: "pg_config.sh"
   config.vm.box = "ubuntu/trusty32"
-  config.vm.network "forwarded_port", guest: 6000, host: 6000
+  config.vm.network "forwarded_port", guest: 6000, host: 1234
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
   # `vagrant box outdated`. This is not recommended.
