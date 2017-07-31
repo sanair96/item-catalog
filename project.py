@@ -366,10 +366,10 @@ def newRestaurant():
 
 @app.route('/restaurant/<int:restaurant_id>/edit', methods=['GET', 'POST'])
 def editRestaurant(restaurant_id):
-    editedrest = session.query(Restaurant).filter_by(id=restaurant_id).one()
-    print "username %s " % str(login_session['username'])
     if not login_session['user_id']:
         return redirect('/login')
+    editedrest = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    print "username %s " % str(login_session['username'])
     if editedrest.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized"\
                " to edit this restaurant. Please create your own restaurant"\
@@ -389,14 +389,14 @@ def editRestaurant(restaurant_id):
 
 @app.route('/restaurant/<int:restaurant_id>/delete/', methods=['GET', 'POST'])
 def deleteRestaurant(restaurant_id):
-    deletedrest = \
-        session.query(Restaurant).filter_by(id=restaurant_id).one()
     if 'username' not in login_session:
         return redirect('/login')
     if deletedrest.user_id != login_session['user_id']:
         return "<script>function myFunction() {alert('You are not authorized"\
                " to delete this restaurant. Please create your own restaurant"\
                " in order to delete.');}</script><body onload='myFunction()''>"
+    deletedrest = \
+        session.query(Restaurant).filter_by(id=restaurant_id).one()
     if request.method == 'POST':
         session.delete(deletedrest)
         session.commit()
@@ -525,6 +525,7 @@ def disconnect():
             gdisconnect()
             del login_session['gplus_id']
             del login_session['credentials']
+            del login_session['access_token']
         if login_session['provider'] == 'facebook':
             fbdisconnect()
             del login_session['facebook_id']
